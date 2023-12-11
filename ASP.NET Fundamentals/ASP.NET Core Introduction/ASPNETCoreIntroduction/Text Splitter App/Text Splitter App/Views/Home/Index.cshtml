@@ -1,0 +1,19 @@
+﻿@model TextViewModel
+@{
+    ViewBag.Heading = "TextSplitter";
+}
+<h1 class="display-4">@ViewBag.Heading</h1>
+<form asp-controller="Home" asp-action="Split" method="post">
+    <div class="col-12">
+        <input asp-for="@Model.Text" class="mr-2" />
+        <span asp-validation-for="@Model.Text" class="small text-danger col-2"></span> <br /><br />
+        <button type="submit" class="btn btn-primary">Split Text</button>
+    </div>
+    <div class="col-2 mt-3">
+        <textarea rows="10">@Model.SplitText</textarea>
+    </div>
+</form>
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+}

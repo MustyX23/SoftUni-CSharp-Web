@@ -1,7 +1,6 @@
 ﻿using Forum.App.Data.Configuration;
 using Forum.App.Data.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 
 namespace Forum.App.Data
 {

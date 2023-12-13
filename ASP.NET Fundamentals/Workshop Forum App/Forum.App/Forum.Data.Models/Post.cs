@@ -2,6 +2,7 @@
 {
     using System.ComponentModel.DataAnnotations;
     using static Forum.App.Common.EntityValidations.Post;
+
     public class Post
     {
         public Post()

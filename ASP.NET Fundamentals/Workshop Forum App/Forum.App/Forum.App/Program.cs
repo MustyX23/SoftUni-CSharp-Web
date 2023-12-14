@@ -1,6 +1,8 @@
 namespace Forum.App
 {
     using Data;
+    using Forum.Services;
+    using Forum.Services.Interfaces;
     using Microsoft.EntityFrameworkCore;
     public class Program
     {
@@ -14,6 +16,8 @@ namespace Forum.App
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
+
+            builder.Services.AddScoped<IPostService, PostService>();
 
             var app = builder.Build();
 

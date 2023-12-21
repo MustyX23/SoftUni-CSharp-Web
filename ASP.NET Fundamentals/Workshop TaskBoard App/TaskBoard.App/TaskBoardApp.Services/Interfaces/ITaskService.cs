@@ -11,7 +11,11 @@ namespace TaskBoardApp.Services.Interfaces
     {
         Task AddAsync(string ownerId, TaskFormModel viewModel);
 
-        Task EditAsync(string id);
+        Task EditAsync(string id, TaskFormModel viewModel);
+
+        Task DeleteAsync(string id);
+
+        Task<TaskFormModel> GetByIdAsync(string id);
 
         Task<TaskDetailsViewModel> GetForDetailsByIdAsync(string id);
     }

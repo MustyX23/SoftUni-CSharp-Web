@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using TaskBoard.App.Extensions;
 using TaskBoardApp.Services.Interfaces;
+using TaskBoardApp.Web.ViewModels.Board;
 using TaskBoardApp.Web.ViewModels.Task;
 
 namespace TaskBoard.App.Controllers
@@ -63,7 +64,34 @@ namespace TaskBoard.App.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(string id)
         {
+            TaskFormModel model = await taskService.GetByIdAsync(id);          
+            model.AllBoards = await boardService.AllForSelectAsync();
 
+            if (model == null)
+            {
+                return NotFound();
+            }
+         
+            return View(model);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Edit(string id, TaskFormModel model)
+        {          
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            await taskService.EditAsync(id, model);
+
+            return RedirectToAction("All", "Board");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(string id)
+        {
+            await taskService.DeleteAsync(id);
+            return RedirectToAction("All", "Board");
         }
     }
 }

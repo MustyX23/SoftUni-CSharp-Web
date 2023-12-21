@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using TaskBoard.App.Data;
+using TaskBoardApp.Services;
+using TaskBoardApp.Services.Interfaces;
 
 namespace TaskBoard.App
 {
@@ -30,6 +32,8 @@ namespace TaskBoard.App
                 .AddEntityFrameworkStores<TaskBoardDbContext>();
 
             builder.Services.AddControllersWithViews();
+            builder.Services.AddScoped<IBoardService, BoardService>();
+            builder.Services.AddScoped<ITaskService, TaskService>();
 
             var app = builder.Build();
 

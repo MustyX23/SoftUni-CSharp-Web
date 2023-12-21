@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<TaskViewModel>
+
 @foreach (var task in Model)
 {
     <div class="card" style="width: 20rem;">
@@ -13,15 +14,23 @@
             </li>
             <li class="list-group-item">
                 <span class="fw-bold">Actions: </span>
-                <a asp-controller="Task" asp-action="Details" asp-route-id="@task.Id" class="btn btn-success mb-2">View</a>
-                <span></span>
+                <a asp-controller="Task" asp-action="Details" asp-route-id="@task.Id" class="btn btn-success mb-2 me-2">View</a>
+
                 @if (User.Identity?.Name == task.Owner)
                 {
-                    <a asp-controller="Task" asp-action="Edit" asp-route-id="@task.Id" class="btn btn-primary mb-2">Edit</a>
-                    <span></span>
-                    <a asp-controller="Task" asp-action="Delete" asp-route-id="@task.Id" class="btn btn-danger mb-2">Delete</a>
+                    <a asp-controller="Task" asp-action="Edit" asp-route-id="@task.Id" class="btn btn-primary mb-2 me-2">Edit</a>
+
+                    <form class="d-inline" asp-controller="Task" asp-action="Delete" asp-route-id="@task.Id" onsubmit="return confirmDelete('@task.Title')">
+                        <button type="submit" class="btn btn-danger mb-2">Delete</button>
+                    </form>
                 }
             </li>
         </ul>
     </div>
 }
+
+<script>
+    function confirmDelete(title) {
+        return confirm('Are you sure that you want to delete this task: ' + title + '?');
+    }
+</script>

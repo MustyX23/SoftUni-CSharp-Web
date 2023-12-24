@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace SoftUniBazar.Models
 {
-    public class AdAllViewModel
+    public class AdViewModel
     {
         public int Id { get; set; }
 

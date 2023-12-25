@@ -15,5 +15,9 @@ namespace SoftUniBazar.Services.Interfaces
         Task RemoveFromCartAsync(string userId, AdViewModel model);
 
         Task<AddAdViewModel> GetAddAdViewModelAsync();
+
+        Task<AddAdViewModel> GetAddAdViewModelByIdAsync(int id);
+        Task AddAsync(AddAdViewModel ad, string userId);
+        Task EditAsync(int id, AddAdViewModel ad, string userId);
     }
 }

@@ -27,6 +27,9 @@ namespace SoftUniBazar.Models
         [Required]
         public int CategoryId { get; set; }
 
+        [Required]
+        public string OwnerId { get; set; } = null!;
+
         public ICollection<CategoryViewModel> Categories { get; set; } = new List<CategoryViewModel>();
     }
 }

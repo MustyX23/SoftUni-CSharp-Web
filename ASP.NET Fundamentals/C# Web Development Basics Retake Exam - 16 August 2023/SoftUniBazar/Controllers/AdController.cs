@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SoftUniBazar.Extensions;
+using SoftUniBazar.Models;
 using SoftUniBazar.Services.Interfaces;
 
 namespace SoftUniBazar.Controllers
@@ -28,6 +29,37 @@ namespace SoftUniBazar.Controllers
 
             return View(ad);
         }
+        [HttpPost]
+        public async Task<IActionResult> Add(AddAdViewModel ad)
+        {
+            var userId = User.GetUserId();
+
+            await adService.AddAsync(ad, userId);
+
+            return RedirectToAction("All", "Ad");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
+        {
+            if (User?.Identity?.IsAuthenticated ?? false)
+            {
+                return RedirectToAction("All", "Ad");
+            }
+            var ad = await adService.GetAddAdViewModelByIdAsync(id);
+
+            return View(ad);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Edit(int id, AddAdViewModel ad)
+        {
+            var userId = User.GetUserId();
+
+            await adService.EditAsync(id, ad, userId);
+
+            return RedirectToAction("All", "Ad");
+        }
+
         public async Task<IActionResult> Cart()
         {
             var userId = User.GetUserId();
@@ -37,7 +69,6 @@ namespace SoftUniBazar.Controllers
             return View(cartAds);
         }
 
-
         [HttpPost]
         public async Task<IActionResult> AddToCart(int id)
         {
@@ -46,11 +77,11 @@ namespace SoftUniBazar.Controllers
 
              if (ad == null)
              {
-                 return RedirectToAction("All", "Ad");
+                 return RedirectToAction("Cart", "Ad");
              }
 
              await adService.AddToCartAsync(userId, ad);
-             return RedirectToAction("All", "Ad");
+             return RedirectToAction("Cart", "Ad");
         }
 
         [HttpPost]
@@ -65,7 +96,7 @@ namespace SoftUniBazar.Controllers
             }
 
             await adService.RemoveFromCartAsync(userId, ad);
-            return RedirectToAction("Cart", "Ad");
+            return RedirectToAction("All", "Ad");
         }
 
 

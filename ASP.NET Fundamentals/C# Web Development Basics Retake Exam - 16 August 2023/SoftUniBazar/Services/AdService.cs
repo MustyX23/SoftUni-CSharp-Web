@@ -3,6 +3,8 @@ using SoftUniBazar.Data;
 using SoftUniBazar.Data.Models;
 using SoftUniBazar.Models;
 using SoftUniBazar.Services.Interfaces;
+using System.Security.Claims;
+
 
 namespace SoftUniBazar.Services
 {
@@ -13,6 +15,23 @@ namespace SoftUniBazar.Services
         public AdService(BazarDbContext dbContext)
         {
             this.dbContext = dbContext;
+        }
+
+        public async Task AddAsync(AddAdViewModel model, string userId)
+        {
+            Ad ad = new Ad()
+            {
+                Name = model.Name,
+                Description = model.Description,
+                ImageUrl = model.ImageUrl,
+                CreatedOn = model.CreatedOn,
+                CategoryId = model.CategoryId,
+                Price = model.Price,
+                OwnerId = userId
+            };
+
+            dbContext.Ads.Add(ad);
+            await dbContext.SaveChangesAsync();
         }
 
         public async Task AddToCartAsync(string userId, AdViewModel ad)
@@ -34,6 +53,19 @@ namespace SoftUniBazar.Services
             }
         }
 
+        public async Task EditAsync(int id, AddAdViewModel model, string userId)
+        {
+            Ad ad = await dbContext.Ads.FirstAsync(a => a.Id == id);
+
+            ad.Name = model.Name;
+            ad.Description = model.Description;
+            ad.ImageUrl = model.ImageUrl;
+            ad.Price = model.Price;
+            ad.CategoryId = model.CategoryId;
+
+            await dbContext.SaveChangesAsync();
+        }
+
         public async Task<AddAdViewModel> GetAddAdViewModelAsync()
         {
             var categories = await dbContext.Categories.Select(c => new CategoryViewModel()
@@ -48,6 +80,27 @@ namespace SoftUniBazar.Services
             };
 
             return ad;
+        }
+
+        public async Task<AddAdViewModel> GetAddAdViewModelByIdAsync(int id)
+        {
+            var ad = await dbContext.Ads.FirstAsync(a => a.Id == id);
+
+            var categories = await dbContext.Categories.Select(c => new CategoryViewModel()
+            {
+                Id = c.Id,
+                Name = c.Name
+            }).ToArrayAsync();
+
+            return new AddAdViewModel()
+            {
+                Name = ad.Name,
+                Description = ad.Description,
+                CategoryId = ad.CategoryId,
+                ImageUrl = ad.ImageUrl,
+                Price = ad.Price,
+                Categories = categories
+            };
         }
 
         public async Task<AdViewModel> GetAdViewModelByIdAsync(int id)

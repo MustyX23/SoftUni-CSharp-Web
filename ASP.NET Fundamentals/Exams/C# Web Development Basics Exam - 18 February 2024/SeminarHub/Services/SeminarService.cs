@@ -19,13 +19,14 @@ namespace SeminarHub.Services
 
         public async Task AddSeminarAsync(AddSeminarFormModel model, string organizerId)
         {
+            DateTime dateAndTime = DateTime.ParseExact(model.DateAndTime, "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture);
+
             Seminar seminar = new Seminar() 
             {
                 Topic = model.Topic,
                 Lecturer = model.Lecturer,
                 Details = model.Details,
-                DateAndTime = DateTime.ParseExact
-                (model.DateAndTime, "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture),
+                DateAndTime = dateAndTime,
                 Duration = model.Duration,
                 CategoryId = model.CategoryId,
                 OrganizerId = organizerId
@@ -45,11 +46,13 @@ namespace SeminarHub.Services
                 .Seminars
                 .FirstOrDefaultAsync(s => s.Id == id);
 
-            if (seminarAndParticipant != null && seminarForDelete != null)
+            if (seminarAndParticipant != null)
             {
                 dbContext.SeminarsParticipants.Remove(seminarAndParticipant);
+            }
+            if (seminarForDelete != null)
+            {                
                 dbContext.Seminars.Remove(seminarForDelete);
-
                 await dbContext.SaveChangesAsync();
             }                         
         }
@@ -62,7 +65,7 @@ namespace SeminarHub.Services
             seminarForEdit.Topic = model.Topic;
             seminarForEdit.Details = model.Details;
             seminarForEdit.Lecturer = model.Lecturer;
-            seminarForEdit.DateAndTime = DateTime.Parse(model.DateAndTime);
+            seminarForEdit.DateAndTime = DateTime.ParseExact(model.DateAndTime, "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture);
             seminarForEdit.Duration = model.Duration;
             seminarForEdit.CategoryId = model.CategoryId;
 
@@ -201,7 +204,7 @@ namespace SeminarHub.Services
             {
                 Topic = seminarForEdit.Topic,
                 Details = seminarForEdit.Details,
-                DateAndTime = seminarForEdit.DateAndTime.ToString("dd/MM/yyyy HH:mm"),
+                DateAndTime = seminarForEdit.DateAndTime.ToString("dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture),
                 Duration = seminarForEdit.Duration,
                 Categories = categories,
                 CategoryId = seminarForEdit.CategoryId,

@@ -109,12 +109,11 @@ namespace SeminarHub.Controllers
 
             model.Categories = categories;
 
-            if (!DateTime.TryParseExact(model.DateAndTime, "dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime date))
+            if (!DateTime.TryParseExact(model.DateAndTime, "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime date))
             {
                 ModelState.AddModelError(nameof(model.DateAndTime), "Invalid date format. Please use format: dd/MM/yyyy HH:mm");
                 return View(model);
             }
-
 
             await seminarService.EditSeminarAsync(id, model);
             return RedirectToAction("All", "Seminar");
